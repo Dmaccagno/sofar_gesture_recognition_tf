@@ -1,0 +1,27 @@
+# for iteration in range(train_dim // batch_size):
+
+# df = FilesUtil.choose_next_file(data_set)
+# df_padded, current_len = FilesUtil.pad_example(df, max_steps)
+
+# with tf.Session() as sess:
+#     init.run()
+#     # todo add epochs and get from all dataset instead of one example
+#     for iterations in range(n_iterations):
+#         X_batch, y_batch, seq = FilesUtil.feed_the_next_file(df_padded, current_len)
+#         X_batch = X_batch.reshape((-1, X_batch.shape[0], X_batch.shape[1]))
+#         y_batch = y_batch.reshape((-1, y_batch.shape[0], y_batch.shape[1]))
+#         # print(X_batch.shape)
+#         # print(y_batch.shape)
+#         sequences = list()
+#         sequences.append(seq)
+#         # sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
+#         sess.run(training_op, feed_dict={X: X_batch, y: y_batch, seq_length: np.asarray(sequences)})
+#         if iterations % 100 == 0:
+#             mse = loss.eval(feed_dict={X: X_batch, y: y_batch, seq_length: np.asarray(sequences)})
+#             print(mse)
+#     # FilesUtil.save_model('tf_gesture_prediction_test', saver, sess)
+
+
+# tf.reset_graph()
+
+# FilesUtil.convert_folder_content_to_csv(FilesUtil.U1_PATH)
