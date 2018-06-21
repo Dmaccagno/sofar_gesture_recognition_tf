@@ -11,10 +11,11 @@ def get_mse(series1, series2):
     return np.square(series2 - series1).mean()
 
 
-def evaluate_rnn_model(single_series):
+def evaluate_rnn_model(single_series, gesture_id):
     tf.reset_default_graph()
-    cut = 10
-    x = tf.placeholder(tf.float32, [None, cut, CONFIG.input_dim])
+    # todo put that parameter in configuration class
+    cut = CONFIG.max_steps
+    x = tf.placeholder(tf.float32, [None, None, CONFIG.input_dim])
     # seq_length = tf.placeholder(tf.int32, [None])
     cell = tf.contrib.rnn.OutputProjectionWrapper(
         tf.contrib.rnn.BasicRNNCell(num_units=CONFIG.neurons_dim, activation=tf.nn.relu),
@@ -23,14 +24,15 @@ def evaluate_rnn_model(single_series):
 
     saver = tf.train.Saver()
     with tf.Session() as sess:
-        x_new = FilesUtil.cut_and_reshape(single_series, cut)
-        model_path = os.path.join(os.getcwd(), 'model', 'rnn.ckpt')
+        # x_new = FilesUtil.cut_and_reshape(single_series, cut)
+        x_new = FilesUtil.reshape(single_series)
+        model_path = os.path.join(os.getcwd(), 'model', 'model' + gesture_id, 'rnn_' + gesture_id + '.ckpt')
         saver.restore(sess, model_path)
         y_pre = sess.run(outputs, feed_dict={x: x_new})
     return x_new, y_pre
 
 
-def create_rnn_model(train_data_sets):
+def create_rnn_model(train_data_sets, gesture_id):
     tf.reset_default_graph()
     x = tf.placeholder(tf.float32, [None, CONFIG.max_steps, CONFIG.input_dim])
     y = tf.placeholder(tf.float32, [None, CONFIG.max_steps, CONFIG.output_dim])
@@ -58,6 +60,6 @@ def create_rnn_model(train_data_sets):
             if epoch % 100 == 0:
                 mse = loss.eval(feed_dict={x: bx, y: by, seq_length: np.asarray(s)})
                 print("EPOCH=", epoch, "MSE", mse)
-        model_path = os.path.join(os.getcwd(), 'model', 'rnn.ckpt')
+        model_path = os.path.join(os.getcwd(), 'model', 'model' + gesture_id, 'rnn_' + gesture_id + '.ckpt')
         saver.save(sess,
                    model_path)

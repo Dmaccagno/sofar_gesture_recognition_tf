@@ -7,18 +7,12 @@ from enum import Enum
 import random
 from matplotlib import pyplot as plt
 
-PROJECT_HOME = os.getcwd()
+from config import CONFIG
 
 
 # todo : general turn unnecessary static method and turn them to instance method
 
 class FilesUtil(object):
-    U1_PATH = os.path.join(PROJECT_HOME, 'data/U01/')
-    U2_PATH = os.path.join(PROJECT_HOME, 'data/U02/')
-    U3_PATH = os.path.join(PROJECT_HOME, 'data/U03/')
-    U4_PATH = os.path.join(PROJECT_HOME, 'data/U04/')
-    U5_PATH = os.path.join(PROJECT_HOME, 'data/U05/')
-    U6_PATH = os.path.join(PROJECT_HOME, 'data/U06/')
 
     @staticmethod
     def split_data_set(path, train_dim):
@@ -72,7 +66,8 @@ class FilesUtil(object):
                 file_path = os.path.join(subdir, file)
                 if file_path.endswith('csv'):
                     # print(os.path.relpath(file_path))
-                    df = pd.DataFrame(np.genfromtxt(file_path, skip_header=True, delimiter=',', usecols=(3, 4, 5)))
+                    df = pd.DataFrame(np.genfromtxt(file_path, skip_header=True, delimiter=',',
+                                                    usecols=(CONFIG.col_id_1, CONFIG.col_id_2, CONFIG.col_id_3)))
                     data.append(df)
         return data
 
@@ -95,6 +90,12 @@ class FilesUtil(object):
         # df = df.fillna(0)
         x_test = df.values
         return np.array(x_test.reshape(-1, cut, x_test.shape[1]))
+
+    @staticmethod
+    def reshape(data_set):
+        df = pd.DataFrame(data_set)
+        x_test = df.values
+        return np.array(x_test.reshape(-1, len(x_test), x_test.shape[1]))
 
     @staticmethod
     def feed_next_batch(data_sets, batch_size, max_size):

@@ -1,0 +1,2 @@
+model_checkpoint_path: "C:\\Users\\Davide\\Documents\\Projects\\sofar_gesture_recognition_tf\\model\\model1\\rnn_1.ckpt"
+all_model_checkpoint_paths: "C:\\Users\\Davide\\Documents\\Projects\\sofar_gesture_recognition_tf\\model\\model1\\rnn_1.ckpt"
