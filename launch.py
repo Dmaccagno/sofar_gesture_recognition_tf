@@ -103,28 +103,38 @@ class Launcher(object):
     @staticmethod
     def train_models():
 
-        # train_sets1, test_sets1 = FilesUtil.split_data_set(CONFIG.G1_PATH, CONFIG.train_space)
-        # create_rnn_model(train_data_sets=train_sets1, gesture_id=str(1), batch_size=CONFIG.batch_size_1,
-        #                  neurons_dim=CONFIG.neurons_dim_1, n_epochs=CONFIG.n_epochs_1)
-        #
-        # train_sets2, test_sets2 = FilesUtil.split_data_set(CONFIG.G2_PATH, CONFIG.train_space)
-        # create_rnn_model(train_data_sets=train_sets2, gesture_id=str(2), batch_size=CONFIG.batch_size_2,
+        train_sets1, test_sets1, validation_sets1 = FilesUtil.split_data_set(CONFIG.G1_PATH, CONFIG.train_space)
+        create_rnn_model(train_data_sets=train_sets1, validation_data_sets=validation_sets1,
+                         gesture_id=str(1),
+                         batch_size=CONFIG.batch_size_1,
+                         neurons_dim=CONFIG.neurons_dim_1, n_epochs=CONFIG.n_epochs_1)
+
+        # train_sets2, test_sets2, validation_sets2 = FilesUtil.split_data_set(CONFIG.G2_PATH, CONFIG.train_space)
+        # create_rnn_model(train_data_sets=train_sets2, validation_data_sets=validation_sets2,
+        #                  gesture_id=str(2),
+        #                  batch_size=CONFIG.batch_size_2,
         #                  neurons_dim=CONFIG.neurons_dim_2, n_epochs=CONFIG.n_epochs_2)
-
-        train_sets5, test_sets5 = FilesUtil.split_data_set(CONFIG.G5_PATH, CONFIG.train_space)
-        create_rnn_model(train_data_sets=train_sets5, gesture_id=str(5), batch_size=CONFIG.batch_size_5,
-                         neurons_dim=CONFIG.neurons_dim_5, n_epochs=CONFIG.n_epochs_5)
-
-        # train_sets6, test_sets6 = FilesUtil.split_data_set(CONFIG.G6_PATH, CONFIG.train_space)
-        # create_rnn_model(train_data_sets=train_sets6, gesture_id=str(6), batch_size=CONFIG.batch_size_6,
-        #                  neurons_dim=CONFIG.neurons_dim_6, n_epochs=CONFIG.n_epochs_6)
         #
-        # train_sets7, test_sets7 = FilesUtil.split_data_set(CONFIG.G7_PATH, CONFIG.train_space)
-        # create_rnn_model(train_data_sets=train_sets7, gesture_id=str(7), batch_size=CONFIG.batch_size_7,
+        # train_sets5, test_sets5, validation_sets5 = FilesUtil.split_data_set(CONFIG.G5_PATH, CONFIG.train_space)
+        # create_rnn_model(train_data_sets=train_sets5, validation_data_sets=validation_sets5,
+        #                  gesture_id=str(5),
+        #                  batch_size=CONFIG.batch_size_5,
+        #                  neurons_dim=CONFIG.neurons_dim_5, n_epochs=CONFIG.n_epochs_5)
+        #
+        # train_sets6, test_sets6, validation_sets6 = FilesUtil.split_data_set(CONFIG.G6_PATH, CONFIG.train_space)
+        # create_rnn_model(train_data_sets=train_sets6, validation_data_sets=validation_sets6,
+        #                  gesture_id=str(6), batch_size=CONFIG.batch_size_6,
+        #                  neurons_dim=CONFIG.neurons_dim_6, n_epochs=CONFIG.n_epochs_6)
+        # #
+        # train_sets7, test_sets7, validation_sets7 = FilesUtil.split_data_set(CONFIG.G7_PATH, CONFIG.train_space)
+        # create_rnn_model(train_data_sets=train_sets7, validation_data_sets=validation_sets7,
+        #                  gesture_id=str(7), batch_size=CONFIG.batch_size_7,
         #                  neurons_dim=CONFIG.neurons_dim_7, n_epochs=CONFIG.n_epochs_7)
         #
-        # train_sets8, test_sets8 = FilesUtil.split_data_set(CONFIG.G8_PATH, CONFIG.train_space)
-        # create_rnn_model(train_data_sets=train_sets8, gesture_id=str(8), batch_size=CONFIG.batch_size_8,
+        # train_sets8, test_sets8, validation_sets8 = FilesUtil.split_data_set(CONFIG.G8_PATH, CONFIG.train_space)
+        # create_rnn_model(train_data_sets=train_sets8, validation_data_sets=validation_sets8,
+        #                  gesture_id=str(8),
+        #                  batch_size=CONFIG.batch_size_8,
         #                  neurons_dim=CONFIG.neurons_dim_8, n_epochs=CONFIG.n_epochs_8)
 
     @staticmethod
@@ -135,90 +145,92 @@ class Launcher(object):
             inner_list = list()
 
             for i in range(CONFIG.evaluation_runs):
-                train_set, test_set = FilesUtil.split_data_set(CONFIG.get_path(data_set[1]), CONFIG.train_space)
+                train_set, test_set, validation = FilesUtil.split_data_set(CONFIG.get_path(data_set[1]),
+                                                                           CONFIG.train_space)
                 x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(gesture_id),
                                                   CONFIG.get_neurons_dim(gesture_id))
-                mse_x = get_mse(x_new[0][:, 0], y_pre[0][:, 0])
-                mse_y = get_mse(x_new[0][:, 1], y_pre[0][:, 1])
-                mse_z = get_mse(x_new[0][:, 2], y_pre[0][:, 2])
+                mse_x = get_mse(x_new[0][1:, 0], y_pre[0][:-1, 0])
+                mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
+                mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
                 inner_list.append(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
                 # main_index = data_set[1]
                 # result_dictionary[main_index][i] =
             outer_list.append(inner_list)
+
         return DataFrame(outer_list, index=[1, 2, 5, 6, 7, 8])
 
-    # @staticmethod
-    # def simulate_online_use(path):
-    #     df = DataFrame(np.genfromtxt(path, skip_header=True, delimiter=',',
-    #                                  usecols=(CONFIG.col_id_1, CONFIG.col_id_2, CONFIG.col_id_3)))
-    #
-    #     # number of windows
-    #     n = int(len(df) / 150)
-    #     count = 0
-    #     for i in range(n):
-    #         print(df[count:count + 150])
+        # @staticmethod
+        # def simulate_online_use(path):
+        #     df = DataFrame(np.genfromtxt(path, skip_header=True, delimiter=',',
+        #                                  usecols=(CONFIG.col_id_1, CONFIG.col_id_2, CONFIG.col_id_3)))
+        #
+        #     # number of windows
+        #     n = int(len(df) / 150)
+        #     count = 0
+        #     for i in range(n):
+        #         print(df[count:count + 150])
 
     @staticmethod
     def test():
         for i in range(CONFIG.evaluation_runs):
-            train_set, test_set = FilesUtil.split_data_set(CONFIG.get_path(1), CONFIG.train_space)
+            train_set, test_set, valid = FilesUtil.split_data_set(CONFIG.get_path(1), CONFIG.train_space)
             x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
                                               CONFIG.get_neurons_dim(1))
-            mse_x = get_mse(x_new[0][:, 0], y_pre[0][:, 0])
-            mse_y = get_mse(x_new[0][:, 1], y_pre[0][:, 1])
-            mse_z = get_mse(x_new[0][:, 2], y_pre[0][:, 2])
+            mse_x = get_mse(x_new[0][1:, 0], y_pre[0][:-1, 0])
+            mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
+            mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
             print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
-        # print("----------------------------------------------------")
-        # for i in range(CONFIG.evaluation_runs):
-        #     train_set, test_set = FilesUtil.split_data_set(CONFIG.get_path(2), CONFIG.train_space)
-        #     x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
-        #                                       CONFIG.get_neurons_dim(1))
-        #     mse_x = get_mse(x_new[0][:, 0], y_pre[0][:, 0])
-        #     mse_y = get_mse(x_new[0][:, 1], y_pre[0][:, 1])
-        #     mse_z = get_mse(x_new[0][:, 2], y_pre[0][:, 2])
-        #     print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
         print("----------------------------------------------------")
         for i in range(CONFIG.evaluation_runs):
-            train_set, test_set = FilesUtil.split_data_set(CONFIG.get_path(5), CONFIG.train_space)
+            train_set, test_set, valid = FilesUtil.split_data_set(CONFIG.get_path(2), CONFIG.train_space)
             x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
                                               CONFIG.get_neurons_dim(1))
-            mse_x = get_mse(x_new[0][:, 0], y_pre[0][:, 0])
-            mse_y = get_mse(x_new[0][:, 1], y_pre[0][:, 1])
-            mse_z = get_mse(x_new[0][:, 2], y_pre[0][:, 2])
+            mse_x = get_mse(x_new[0][1:, 0], y_pre[0][:-1, 0])
+            mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
+            mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
             print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
-        # print("----------------------------------------------------")
-        # for i in range(CONFIG.evaluation_runs):
-        #     train_set, test_set = FilesUtil.split_data_set(CONFIG.get_path(6), CONFIG.train_space)
-        #     x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
-        #                                       CONFIG.get_neurons_dim(1))
-        #     mse_x = get_mse(x_new[0][:, 0], y_pre[0][:, 0])
-        #     mse_y = get_mse(x_new[0][:, 1], y_pre[0][:, 1])
-        #     mse_z = get_mse(x_new[0][:, 2], y_pre[0][:, 2])
-        #     print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
-        # print("----------------------------------------------------")
-        # for i in range(CONFIG.evaluation_runs):
-        #
-        #     train_set, test_set = FilesUtil.split_data_set(CONFIG.get_path(7), CONFIG.train_space)
-        #     x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
-        #                                       CONFIG.get_neurons_dim(1))
-        #     mse_x = get_mse(x_new[0][:, 0], y_pre[0][:, 0])
-        #     mse_y = get_mse(x_new[0][:, 1], y_pre[0][:, 1])
-        #     mse_z = get_mse(x_new[0][:, 2], y_pre[0][:, 2])
-        #     print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
-        # print("----------------------------------------------------")
-        # for i in range(CONFIG.evaluation_runs):
-        #     train_set, test_set = FilesUtil.split_data_set(CONFIG.get_path(8), CONFIG.train_space)
-        #     x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
-        #                                       CONFIG.get_neurons_dim(1))
-        #     mse_x = get_mse(x_new[0][:, 0], y_pre[0][:, 0])
-        #     mse_y = get_mse(x_new[0][:, 1], y_pre[0][:, 1])
-        #     mse_z = get_mse(x_new[0][:, 2], y_pre[0][:, 2])
-        #     print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
+        print("----------------------------------------------------")
+        for i in range(CONFIG.evaluation_runs):
+            train_set, test_set, valid = FilesUtil.split_data_set(CONFIG.get_path(5), CONFIG.train_space)
+            x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
+                                              CONFIG.get_neurons_dim(1))
+            mse_x = get_mse(x_new[0][1:, 0], y_pre[0][:-1, 0])
+            mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
+            mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
+            print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
+        print("----------------------------------------------------")
+        for i in range(CONFIG.evaluation_runs):
+            train_set, test_set, valid = FilesUtil.split_data_set(CONFIG.get_path(6), CONFIG.train_space)
+            x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
+                                              CONFIG.get_neurons_dim(1))
+            mse_x = get_mse(x_new[0][1:, 0], y_pre[0][:-1, 0])
+            mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
+            mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
+            print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
+        print("----------------------------------------------------")
+        for i in range(CONFIG.evaluation_runs):
+            train_set, test_set, valid = FilesUtil.split_data_set(CONFIG.get_path(7), CONFIG.train_space)
+            x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
+                                              CONFIG.get_neurons_dim(1))
+            mse_x = get_mse(x_new[0][1:, 0], y_pre[0][:-1, 0])
+            mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
+            mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
+            print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
+        print("----------------------------------------------------")
+        for i in range(CONFIG.evaluation_runs):
+            train_set, test_set, valid = FilesUtil.split_data_set(CONFIG.get_path(8), CONFIG.train_space)
+            x_new, y_pre = evaluate_rnn_model(FilesUtil.get_random_file(test_set), str(1),
+                                              CONFIG.get_neurons_dim(1))
+            mse_x = get_mse(x_new[0][1:, 0], y_pre[0][:-1, 0])
+            mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
+            mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
+            print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
 
 
 # Launcher.train_models()
-# Launcher.launch_evaluation()
-Launcher.test()
+
+Launcher.launch_evaluation()
+# Launcher.test()
 # test1 = FilesUtil.generate_data_set(os.path.join(CONFIG.G1_PATH))
 # test2 = FilesUtil.generate_data_set(os.path.join(CONFIG.G5_PATH))
 #

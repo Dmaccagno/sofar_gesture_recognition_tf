@@ -15,17 +15,22 @@ from config import CONFIG
 class FilesUtil(object):
 
     @staticmethod
+    def get_percent_diff(a, b):
+        return (abs(a - b) / max(abs(a), abs(b))) * 100
+        # return (a / b) * 100
+
+    @staticmethod
     def reject_outliers(data, m=2):
         return data[abs(data - np.mean(data)) < m * np.std(data)]
 
     @staticmethod
     def split_data_set(path, train_dim):
         data_set = FilesUtil.generate_data_set(path)
-        total_dim = len(data_set)
-        test_dim = total_dim - train_dim
         train_data_sets = data_set[:train_dim]
-        test_data_sets = data_set[test_dim:]
-        return train_data_sets, test_data_sets
+        temp_data_sets = data_set[train_dim:]
+        test_data_sets = temp_data_sets[:train_dim]
+        validation_data_sets = temp_data_sets[train_dim:]
+        return train_data_sets, test_data_sets, validation_data_sets
 
     @staticmethod
     def print_current_path(path):
