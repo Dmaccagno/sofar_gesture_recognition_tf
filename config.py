@@ -55,9 +55,10 @@ class CONFIG(object):
     col_id_2 = 1
     col_id_3 = 2
     UNI_GE_PATH = os.path.join(os.getcwd(), 'unigedataset/')
+    ONLINE_DATA_SET = os.path.join(os.getcwd(), 'online_data/')
     # UNI_GE_DATA_SETS = [1]
     UNI_GE_DATA_SETS = [1, 2, 5, 6, 7, 8]
-    evaluation_runs = 30
+    evaluation_runs = 10
 
     @staticmethod
     def get_path(gesture_id):

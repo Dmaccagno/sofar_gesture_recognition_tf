@@ -81,6 +81,9 @@ class FilesUtil(object):
         return data
 
     @staticmethod
+    def generate_data_set_from_file(file_path):
+        return pd.DataFrame(np.genfromtxt(file_path, delimiter=','))
+
     def get_train_example(data_set, seq_len):
         # todo reshape with train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
         # todo generalizzare nel caso il numero degli input è maggiore di 3
@@ -171,3 +174,19 @@ class FilesUtil(object):
         az.set_title("z-data")
         plt.tight_layout()
         plt.show()
+
+    @staticmethod
+    def plot_online_eval(errors, gesture_id):
+        # series1 = series1_r[:-1]
+        # series2 = series2_r[1:]
+        plt.figure(1)
+        plt.plot(np.arange(len(errors)), errors, label="value")
+        plt.title("gesture", gesture_id)
+        plt.tight_layout()
+        plt.show()
+
+    @staticmethod
+    def get_next_window(seq, dimension, start, end):
+        start = start + 1
+        end = start + dimension - 1
+        return seq[start:end], start, end

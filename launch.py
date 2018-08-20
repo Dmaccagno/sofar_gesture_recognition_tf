@@ -1,3 +1,6 @@
+from matplotlib import pyplot as plt
+from threading import Thread
+
 from rnn import create_rnn_model, evaluate_rnn_model, get_mse
 from file_utils import FilesUtil
 from config import CONFIG
@@ -5,7 +8,7 @@ from pandas import DataFrame
 from collections import defaultdict
 import numpy as np
 import os
-import itertools
+from itertools import islice
 from collections import Counter
 
 
@@ -226,10 +229,94 @@ class Launcher(object):
             mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
             print(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
 
+    @staticmethod
+    def online_test(path, gesture_id):
+        data_set = FilesUtil.generate_data_set_from_file(path)
+        start = 0
+        end = 149
+        errors = list()
+        for i in range(len(data_set)):
 
-# Launcher.train_models()
+            if end < len(data_set):
+                current = data_set[start:end]
+                x_new, y_pre = evaluate_rnn_model(current.values, str(gesture_id), CONFIG.get_neurons_dim(gesture_id))
+                mse_x = get_mse(x_new[0][1:, 0], y_pre[0][:-1, 0])
+                mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
+                mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
+                errors.append(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
+                current, start, end = FilesUtil.get_next_window(current, dimension=150, start=start, end=end)
+                print("done " + str(i) + "  of " + len(data_set).__str__() + " error " + str(
+                    np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z)) + " gesture " + str(gesture_id))
+        return errors
 
-Launcher.launch_evaluation()
+
+# FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
+# Launcher.train_models()'1122334455.txt.txt'
+err1 = Launcher.online_test(
+    'C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1122334455.txt', 1)
+err2 = Launcher.online_test(
+    'C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1122334455.txt', 2)
+err3 = Launcher.online_test(
+    'C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1122334455.txt', 5)
+err4 = Launcher.online_test(
+    'C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1122334455.txt', 6)
+err5 = Launcher.online_test(
+    'C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1122334455.txt', 7)
+err6 = Launcher.online_test(
+    'C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1122334455.txt', 8)
+
+_len = len(err1)
+
+plt.figure(1)
+a1 = plt.subplot(611)
+a1.set_title("x-data")
+a1.plot(np.arange(len(err1)), err1)
+a2 = plt.subplot(612)
+a2.plot(np.arange(len(err2)), err2)
+a2.set_title("y-data")
+a5 = plt.subplot(613)
+a5.plot(np.arange(len(err3)), err3)
+a5.set_title("z-data")
+a6 = plt.subplot(614)
+a6.set_title("x-data")
+a6.plot(np.arange(len(err4)), err4)
+a7 = plt.subplot(615)
+a7.plot(np.arange(len(err5)), err5)
+a7.set_title("y-data")
+a8 = plt.subplot(616)
+a8.plot(np.arange(len(err6)), err6)
+a8.set_title("z-data")
+plt.tight_layout()
+plt.show()
+
+res = dict()
+# check for the proper mse in the proper interval
+for i, v in range(_len):
+    res['1'] = v[53:111]
+    res['2'] = v[154:179]
+    res['3'] = v[232:254]
+    res['4'] = v[284:326]
+    res['5'] = v[342:359]
+    res['6'] = v[366:377]
+    res['7'] = v[378:386]
+    res['8'] = v[396:421]
+    res['9'] = v[439:476]
+    res['10'] = v[501:542]
+
+# Launcher.online_test('C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1x2x5x6x1.txt',
+#                      1)
+# Launcher.online_test('C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1x2x5x6x1.txt',
+#                      2)
+# Launcher.online_test('C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1x2x5x6x1.txt',
+#                      5)
+# Launcher.online_test('C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1x2x5x6x1.txt',
+#                      6)
+# Launcher.online_test('C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1x2x5x6x1.txt',
+#                      7)
+# Launcher.online_test('C:\\Users\\Davide\\Documents\Projects\\sofar_gesture_recognition_tf\\online_data\\1x2x5x6x1.txt',
+#                      8)
+# 'C:\\Users\\Davide\\Documents\\Projects\\sofar_gesture_recognition_tf\\online_data/1115556662.csv'
+# Launcher.launch_evaluation()
 # Launcher.test()
 # test1 = FilesUtil.generate_data_set(os.path.join(CONFIG.G1_PATH))
 # test2 = FilesUtil.generate_data_set(os.path.join(CONFIG.G5_PATH))
