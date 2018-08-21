@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from enum import Enum
 import random
+import pickle
 from matplotlib import pyplot as plt
 
 from config import CONFIG
@@ -190,3 +191,9 @@ class FilesUtil(object):
         start = start + 1
         end = start + dimension - 1
         return seq[start:end], start, end
+
+    @staticmethod
+    def save_results_to_file(error_function):
+        f = open(os.path.join(os.getcwd(), 'err1.p'), "wb")
+        pickle.dump(error_function, f)
+        f.close()
