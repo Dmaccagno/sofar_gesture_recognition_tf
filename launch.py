@@ -250,14 +250,22 @@ class Launcher(object):
         return errors
 
 
+e1 = FilesUtil.load_result_file('err1.p')
+e2 = FilesUtil.load_result_file('err2.p')
+e5 = FilesUtil.load_result_file('err5.p')
+e6 = FilesUtil.load_result_file('err6.p')
+e7 = FilesUtil.load_result_file('err7.p')
+e8 = FilesUtil.load_result_file('err8.p')
+
+print(t)
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
 # Launcher.train_models()'1122334455.txt.txt'
-err1 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 1)
-err2 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 2)
-err5 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 5)
-err6 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 6)
-err7 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 7)
-err8 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 8)
+# err1 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 1)
+# err2 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 2)
+# err5 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 5)
+# err6 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 6)
+# err7 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 7)
+# err8 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 8)
 
 # _len = len(err1)
 
@@ -283,19 +291,19 @@ err8 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.tx
 # plt.tight_layout()
 # plt.show()
 
-res1 = dict()
-res2 = dict()
-res3 = dict()
-res4 = dict()
-res5 = dict()
-res6 = dict()
+# res1 = dict()
+# res2 = dict()
+# res3 = dict()
+# res4 = dict()
+# res5 = dict()
+# res6 = dict()
 
-FilesUtil.save_results_to_file(err1, 1)
-FilesUtil.save_results_to_file(err2, 2)
-FilesUtil.save_results_to_file(err5, 5)
-FilesUtil.save_results_to_file(err6, 6)
-FilesUtil.save_results_to_file(err7, 7)
-FilesUtil.save_results_to_file(err8, 8)
+# FilesUtil.save_results_to_file(err1, 1)
+# FilesUtil.save_results_to_file(err2, 2)
+# FilesUtil.save_results_to_file(err5, 5)
+# FilesUtil.save_results_to_file(err6, 6)
+# FilesUtil.save_results_to_file(err7, 7)
+# FilesUtil.save_results_to_file(err8, 8)
 
 # check for the proper mse in the proper interval
 # for i, v in enumerate(err1):

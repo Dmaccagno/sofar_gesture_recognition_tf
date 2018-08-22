@@ -197,3 +197,8 @@ class FilesUtil(object):
         f = open(os.path.join(os.getcwd(), 'online_results', 'err' + str(id) + '.p'), "wb")
         pickle.dump(error_function, f)
         f.close()
+
+    @staticmethod
+    def load_result_file(results_file):
+        results = pickle.load(open(os.path.join(os.getcwd(), 'online_results', results_file), "rb"))
+        return results
