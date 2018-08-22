@@ -253,13 +253,13 @@ class Launcher(object):
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
 # Launcher.train_models()'1122334455.txt.txt'
 err1 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 1)
-# err2 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 2)
-# err3 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 5)
-# err4 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 6)
-# err5 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 7)
-# err6 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 8)
+err2 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 2)
+err5 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 5)
+err6 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 6)
+err7 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 7)
+err8 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 8)
 
-_len = len(err1)
+# _len = len(err1)
 
 # plt.figure(1)
 # a1 = plt.subplot(611)
@@ -290,25 +290,25 @@ res4 = dict()
 res5 = dict()
 res6 = dict()
 
-FilesUtil.save_results_to_file(err1)
-# FilesUtil.save_results_to_file(err2)
-# FilesUtil.save_results_to_file(err3)
-# FilesUtil.save_results_to_file(err4)
-# FilesUtil.save_results_to_file(err5)
-# FilesUtil.save_results_to_file(err6)
+FilesUtil.save_results_to_file(err1, 1)
+FilesUtil.save_results_to_file(err2, 2)
+FilesUtil.save_results_to_file(err5, 5)
+FilesUtil.save_results_to_file(err6, 6)
+FilesUtil.save_results_to_file(err7, 7)
+FilesUtil.save_results_to_file(err8, 8)
 
 # check for the proper mse in the proper interval
-for i, v in enumerate(err1):
-    res1['1'] = v[53 * 4:111 * 4]
-    res1['2'] = v[154 * 4:179 * 4]
-    res1['3'] = v[232 * 4:254 * 4]
-    res1['4'] = v[284 * 4:326 * 4]
-    res1['5'] = v[342 * 4:359 * 4]
-    res1['6'] = v[366 * 4:377 * 4]
-    res1['7'] = v[378 * 4:386 * 4]
-    res1['8'] = v[396 * 4:421 * 4]
-    res1['9'] = v[439 * 4:476 * 4]
-    res1['10'] = v[501 * 4:542 * 4]
+# for i, v in enumerate(err1):
+#     res1['1'] = v[53 * 4:111 * 4]
+#     res1['2'] = v[154 * 4:179 * 4]
+#     res1['3'] = v[232 * 4:254 * 4]
+#     res1['4'] = v[284 * 4:326 * 4]
+#     res1['5'] = v[342 * 4:359 * 4]
+#     res1['6'] = v[366 * 4:377 * 4]
+#     res1['7'] = v[378 * 4:386 * 4]
+#     res1['8'] = v[396 * 4:421 * 4]
+#     res1['9'] = v[439 * 4:476 * 4]
+#     res1['10'] = v[501 * 4:542 * 4]
 
 # for i, v in enumerate(err2):
 #     res2['1'] = v[53 * 4:111 * 4]

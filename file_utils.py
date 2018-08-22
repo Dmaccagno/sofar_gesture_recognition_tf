@@ -193,7 +193,7 @@ class FilesUtil(object):
         return seq[start:end], start, end
 
     @staticmethod
-    def save_results_to_file(error_function):
-        f = open(os.path.join(os.getcwd(), 'err1.p'), "wb")
+    def save_results_to_file(error_function, id):
+        f = open(os.path.join(os.getcwd(), 'online_results', 'err' + str(id) + '.p'), "wb")
         pickle.dump(error_function, f)
         f.close()
