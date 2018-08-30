@@ -249,6 +249,37 @@ class Launcher(object):
                     np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z)) + " gesture " + str(gesture_id))
         return errors
 
+    @staticmethod
+    def update_sliding(data,window):
+
+        #create a windos of nan - passed as argument
+
+
+
+
+
+        return ""
+
+    @staticmethod
+    def detect(series):
+        threshold = 0.2
+        gesture_duration = 150
+        picks = {}
+
+
+
+
+        # print(series[212:444])
+        # print(v[154 * 4:179 * 4])
+        # print(v[232 * 4:254 * 4])
+        # print(v[284 * 4:326 * 4])
+        # print(v[342 * 4:359 * 4])
+        # print(v[366 * 4:377 * 4])
+        # print(v[378 * 4:386 * 4])
+        # print(v[396 * 4:421 * 4])
+        # print(v[439 * 4:476 * 4])
+        # print(v[501 * 4:542 * 4])
+
 
 e1 = FilesUtil.load_result_file('err1.p')
 e2 = FilesUtil.load_result_file('err2.p')
@@ -257,7 +288,10 @@ e6 = FilesUtil.load_result_file('err6.p')
 e7 = FilesUtil.load_result_file('err7.p')
 e8 = FilesUtil.load_result_file('err8.p')
 
-print(t)
+# Launcher.detect(series=e1)
+
+
+
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
 # Launcher.train_models()'1122334455.txt.txt'
 # err1 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/1122334455.txt'), 1)
