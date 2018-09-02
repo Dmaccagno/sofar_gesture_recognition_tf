@@ -250,24 +250,34 @@ class Launcher(object):
         return errors
 
     @staticmethod
-    def update_sliding(data,window):
-
-        #create a windos of nan - passed as argument
-
-
-
-
-
-        return ""
+    def update_window(data, window, current_end):
+        window = np.delete(window, 0)
+        window = np.append(window, np.array(data[current_end]))
+        current_end += 1
+        current_start = current_end - len(window)
+        return window, current_end, current_start
 
     @staticmethod
     def detect(series):
         threshold = 0.2
-        gesture_duration = 150
-        picks = {}
-
-
-
+        # todo setup a config for current_end
+        current_end = 0
+        window_len = 150
+        window = np.full((1, window_len), np.nan)
+        results = list()
+        while current_end <= len(series) - 1:
+            window, current_end, current_start = Launcher.update_window(series, window, current_end)
+            # if current_end > window_len and all(i < threshold for i in window):
+            #     print(
+            #         "i maybe found a gesture from index "
+            #         + current_start.__str__() + "to index "
+            #         + current_end.__str__())
+            results.append(window)
+        for i, v in enumerate(results[149:]):
+            if all(j < 0.2 for j in v):
+                print("i maybe found a gesture from index "
+                      + i.__str__() + "to index "
+                      + (i + 150).__str__())
 
         # print(series[212:444])
         # print(v[154 * 4:179 * 4])
@@ -288,8 +298,12 @@ e6 = FilesUtil.load_result_file('err6.p')
 e7 = FilesUtil.load_result_file('err7.p')
 e8 = FilesUtil.load_result_file('err8.p')
 
-# Launcher.detect(series=e1)
-
+#Launcher.detect(series=e1)
+#Launcher.detect(series=e2)
+Launcher.detect(series=e5)
+# Launcher.detect(series=e6)
+# Launcher.detect(series=e7)
+# Launcher.detect(series=e8)
 
 
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
