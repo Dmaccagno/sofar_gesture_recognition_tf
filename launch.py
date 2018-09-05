@@ -275,8 +275,6 @@ class Launcher(object):
             #         + current_start.__str__() + "to index "
             #         + current_end.__str__())
             results.append(window)
-            # todo remember to re-index on the main collection...
-
         for i, v in enumerate(results[149:]):
             if all(j < 0.2 for j in v):
                 print("i maybe found a gesture from index "
@@ -285,16 +283,16 @@ class Launcher(object):
 
 
 e1 = FilesUtil.load_result_file('5621126526', 'err1.p')
-e2 = FilesUtil.load_result_file('5621126526', 'err1.p')
-e5 = FilesUtil.load_result_file('5621126526', 'err1.p')
-e6 = FilesUtil.load_result_file('5621126526', 'err1.p')
-e7 = FilesUtil.load_result_file('5621126526', 'err1.p')
-e8 = FilesUtil.load_result_file('5621126526', 'err1.p')
-print("aaaa")
+e2 = FilesUtil.load_result_file('5621126526', 'err2.p')
+e5 = FilesUtil.load_result_file('5621126526', 'err5.p')
+e6 = FilesUtil.load_result_file('5621126526', 'err6.p')
+e7 = FilesUtil.load_result_file('5621126526', 'err7.p')
+e8 = FilesUtil.load_result_file('5621126526', 'err8.p')
+
 # Launcher.detect(series=e1)
 # Launcher.detect(series=e2)
 # Launcher.detect(series=e5)
-# Launcher.detect(series=e6)
+Launcher.detect(series=e6)
 # Launcher.detect(series=e7)
 # Launcher.detect(series=e8)
 
