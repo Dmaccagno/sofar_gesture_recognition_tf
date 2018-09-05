@@ -260,9 +260,9 @@ class Launcher(object):
         return window, current_end, current_start
 
     @staticmethod
-    def detect(series):
+    def get_results(series):
         threshold = 0.2
-        # todo setup a config for current_end
+        # todo setup a config for current_end ( from the trained model)
         current_end = 0
         window_len = 150
         window = np.full((1, window_len), np.nan)
@@ -275,12 +275,16 @@ class Launcher(object):
             #         + current_start.__str__() + "to index "
             #         + current_end.__str__())
             results.append(window)
-        for i, v in enumerate(results[149:]):
-            if all(j < 0.2 for j in v):
-                print("i maybe found a gesture from index "
-                      + i.__str__() + "to index "
-                      + (i + 150).__str__())
+        return results
+        # for i, v in enumerate(results[149:]):
+        #     if all(j < 0.2 for j in v):
+        #         print("i maybe found a gesture from index "
+        #               + i.__str__() + "to index "
+        #               + (i + 150).__str__())
 
+
+# todo - put that in a config file
+experiment_len = 3060
 
 e1 = FilesUtil.load_result_file('5621126526', 'err1.p')
 e2 = FilesUtil.load_result_file('5621126526', 'err2.p')
@@ -289,12 +293,16 @@ e6 = FilesUtil.load_result_file('5621126526', 'err6.p')
 e7 = FilesUtil.load_result_file('5621126526', 'err7.p')
 e8 = FilesUtil.load_result_file('5621126526', 'err8.p')
 
-# Launcher.detect(series=e1)
-# Launcher.detect(series=e2)
-# Launcher.detect(series=e5)
-Launcher.detect(series=e6)
-# Launcher.detect(series=e7)
-# Launcher.detect(series=e8)
+r1 = Launcher.get_results(series=e1)
+r2 = Launcher.get_results(series=e2)
+r5 = Launcher.get_results(series=e5)
+r6 = Launcher.get_results(series=e6)
+r7 = Launcher.get_results(series=e7)
+r8 = Launcher.get_results(series=e8)
+
+
+
+# todo torna la lista delle finestre -- direttamente da online_test piuttosto che da detect etc..cosi confronto le window e intreccio le info tra la threshol e i risultati della window
 
 
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
