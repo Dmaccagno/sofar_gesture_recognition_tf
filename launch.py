@@ -260,10 +260,10 @@ class Launcher(object):
         return window, current_end, current_start
 
     @staticmethod
-    def get_results(series):
+    def get_results(series, gesture_id):
         # todo setup a config for current_end ( from the trained model)
         current_end = 0
-        window_len = 150
+        window_len = CONFIG.get_size_dim(gesture_id)
         window = np.full((1, window_len), np.nan)
         results = list()
         while current_end <= len(series) - 1:
@@ -296,19 +296,19 @@ errors.append(e6)
 errors.append(e7)
 errors.append(e8)
 
-r1 = Launcher.get_results(series=e1)
-r2 = Launcher.get_results(series=e2)
-r5 = Launcher.get_results(series=e5)
-r6 = Launcher.get_results(series=e6)
-r7 = Launcher.get_results(series=e7)
-r8 = Launcher.get_results(series=e8)
+r1 = Launcher.get_results(series=e1, gesture_id=1)
+r2 = Launcher.get_results(series=e2, gesture_id=2)
+r5 = Launcher.get_results(series=e5, gesture_id=5)
+r6 = Launcher.get_results(series=e6, gesture_id=6)
+r7 = Launcher.get_results(series=e7, gesture_id=7)
+r8 = Launcher.get_results(series=e8, gesture_id=8)
 
-#Launcher.detect(r1, 1)
-#Launcher.detect(r2, 2)
-#Launcher.detect(r5, 5)
+# Launcher.detect(r1, 1)
+# Launcher.detect(r2, 2)
+# Launcher.detect(r5, 5)
 Launcher.detect(r6, 6)
-#Launcher.detect(r7, 7)
-#Launcher.detect(r8, 8)
+# Launcher.detect(r7, 7)
+# Launcher.detect(r8, 8)
 
 
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
