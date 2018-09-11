@@ -261,7 +261,6 @@ class Launcher(object):
 
     @staticmethod
     def get_results(series):
-        threshold = 0.2
         # todo setup a config for current_end ( from the trained model)
         current_end = 0
         window_len = 150
@@ -269,22 +268,18 @@ class Launcher(object):
         results = list()
         while current_end <= len(series) - 1:
             window, current_end, current_start = Launcher.update_window(series, window, current_end)
-            # if current_end > window_len and all(i < threshold for i in window):
-            #     print(
-            #         "i maybe found a gesture from index "
-            #         + current_start.__str__() + "to index "
-            #         + current_end.__str__())
             results.append(window)
         return results
-        # for i, v in enumerate(results[149:]):
-        #     if all(j < 0.2 for j in v):
-        #         print("i maybe found a gesture from index "
-        #               + i.__str__() + "to index "
-        #               + (i + 150).__str__())
 
+    @staticmethod
+    def detect(array, gesture_id):
+        starting_point = CONFIG.get_size_dim(gesture_id) - 1
+        for i, v in enumerate(array[starting_point:]):
+            if all(j < CONFIG.get_threshold(gesture_id) for j in v):
+                print("i maybe found a gesture from index "
+                      + i.__str__() + "to index "
+                      + (i + 150).__str__())
 
-# todo - put that in a config file
-experiment_len = 3060
 
 e1 = FilesUtil.load_result_file('5621126526', 'err1.p')
 e2 = FilesUtil.load_result_file('5621126526', 'err2.p')
@@ -293,6 +288,14 @@ e6 = FilesUtil.load_result_file('5621126526', 'err6.p')
 e7 = FilesUtil.load_result_file('5621126526', 'err7.p')
 e8 = FilesUtil.load_result_file('5621126526', 'err8.p')
 
+errors = list()
+errors.append(e1)
+errors.append(e2)
+errors.append(e5)
+errors.append(e6)
+errors.append(e7)
+errors.append(e8)
+
 r1 = Launcher.get_results(series=e1)
 r2 = Launcher.get_results(series=e2)
 r5 = Launcher.get_results(series=e5)
@@ -300,9 +303,12 @@ r6 = Launcher.get_results(series=e6)
 r7 = Launcher.get_results(series=e7)
 r8 = Launcher.get_results(series=e8)
 
-
-
-# todo torna la lista delle finestre -- direttamente da online_test piuttosto che da detect etc..cosi confronto le window e intreccio le info tra la threshol e i risultati della window
+#Launcher.detect(r1, 1)
+#Launcher.detect(r2, 2)
+#Launcher.detect(r5, 5)
+Launcher.detect(r6, 6)
+#Launcher.detect(r7, 7)
+#Launcher.detect(r8, 8)
 
 
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)

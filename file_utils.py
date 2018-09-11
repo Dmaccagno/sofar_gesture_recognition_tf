@@ -177,16 +177,6 @@ class FilesUtil(object):
         plt.show()
 
     @staticmethod
-    def plot_online_eval(errors, gesture_id):
-        # series1 = series1_r[:-1]
-        # series2 = series2_r[1:]
-        plt.figure(1)
-        plt.plot(np.arange(len(errors)), errors, label="value")
-        plt.title("gesture", gesture_id)
-        plt.tight_layout()
-        plt.show()
-
-    @staticmethod
     def get_next_window(seq, dimension, start, end):
         start = start + 1
         end = start + dimension - 1
@@ -202,3 +192,29 @@ class FilesUtil(object):
     def load_result_file(base_path, results_file):
         results = pickle.load(open(os.path.join(os.getcwd(), 'online_results', base_path, results_file), "rb"))
         return results
+
+    @staticmethod
+    def plot_online_results(errors):
+        # todo make this function able to plot an arbitrary number of series
+        print("printing...")
+        plt.figure(1)
+        a1 = plt.subplot(611)
+        a1.set_title("gesture 1")
+        a1.plot(np.arange(len(errors[0])), errors[0])
+        a2 = plt.subplot(612)
+        a2.plot(np.arange(len(errors[1])), errors[1])
+        a2.set_title("gesture 2")
+        a5 = plt.subplot(613)
+        a5.plot(np.arange(len(errors[2])), errors[2])
+        a5.set_title("gesture 5")
+        a6 = plt.subplot(614)
+        a6.set_title("gesture 6")
+        a6.plot(np.arange(len(errors[3])), errors[3])
+        a7 = plt.subplot(615)
+        a7.plot(np.arange(len(errors[4])), errors[4])
+        a7.set_title("gesture 7")
+        a8 = plt.subplot(616)
+        a8.plot(np.arange(len(errors[5])), errors[5])
+        a8.set_title("gesture 8")
+        plt.tight_layout()
+        plt.show()
