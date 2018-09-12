@@ -232,6 +232,12 @@ class Launcher(object):
     @staticmethod
     def online_test(path, gesture_id):
 
+        results_folder_name = os.path.basename(os.path.splitext(path)[0])
+        full_path = 'online_results/' + results_folder_name
+
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+
         data_set = FilesUtil.generate_data_set_from_file(path)
         start = 0
         end = 149
@@ -281,13 +287,13 @@ class Launcher(object):
                       + (i + 150).__str__())
 
 
-e1 = FilesUtil.load_result_file('5621126526', 'err1.p')
-e2 = FilesUtil.load_result_file('5621126526', 'err2.p')
-e5 = FilesUtil.load_result_file('5621126526', 'err5.p')
-e6 = FilesUtil.load_result_file('5621126526', 'err6.p')
-e7 = FilesUtil.load_result_file('5621126526', 'err7.p')
-e8 = FilesUtil.load_result_file('5621126526', 'err8.p')
-
+e1 = FilesUtil.load_result_file('34563456_1', 'err1.p')
+e2 = FilesUtil.load_result_file('34563456_1', 'err2.p')
+e5 = FilesUtil.load_result_file('34563456_1', 'err5.p')
+e6 = FilesUtil.load_result_file('34563456_1', 'err6.p')
+e7 = FilesUtil.load_result_file('34563456_1', 'err7.p')
+e8 = FilesUtil.load_result_file('34563456_1', 'err8.p')
+#
 errors = list()
 errors.append(e1)
 errors.append(e2)
@@ -295,7 +301,7 @@ errors.append(e5)
 errors.append(e6)
 errors.append(e7)
 errors.append(e8)
-
+#
 r1 = Launcher.get_results(series=e1, gesture_id=1)
 r2 = Launcher.get_results(series=e2, gesture_id=2)
 r5 = Launcher.get_results(series=e5, gesture_id=5)
@@ -304,18 +310,18 @@ r7 = Launcher.get_results(series=e7, gesture_id=7)
 r8 = Launcher.get_results(series=e8, gesture_id=8)
 
 # Launcher.detect(r1, 1)
-# Launcher.detect(r2, 2)
+Launcher.detect(r2, 2)
 # Launcher.detect(r5, 5)
-Launcher.detect(r6, 6)
+# Launcher.detect(r6, 6)
 # Launcher.detect(r7, 7)
 # Launcher.detect(r8, 8)
 
-
+# print(r8)
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
 # Launcher.train_models()'1122334455.txt.txt'
-# err1 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/5621126526.txt'), 1)
-# err2 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/5621126526.txt'), 2)
-# err5 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/5621126526.txt'), 5)
-# err6 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/5621126526.txt'), 6)
-# err7 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/5621126526.txt'), 7)
-# err8 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/5621126526.txt'), 8)
+# err1 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 1)
+# err2 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 2)
+# err5 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 5)
+# err6 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 6)
+# err7 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 7)
+# err8 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 8)

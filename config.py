@@ -37,14 +37,14 @@ class CONFIG(object):
     neurons_dim_7 = 100
     learning_rate_7 = 0.0001
     max_steps_7 = 150
-    threshold_7 = 0.2
+    threshold_7 = 0.9
     # special config for model 8
     n_epochs_8 = 300
     batch_size_8 = 1
     neurons_dim_8 = 100
     learning_rate_8 = 0.0001
     max_steps_8 = 150
-    threshold_8 = 0.2
+    threshold_8 = 1.0
 
     train_space = 30
     input_dim = 3
