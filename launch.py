@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 from threading import Thread
 
+from models import Gesture
 from rnn import create_rnn_model, evaluate_rnn_model, get_mse
 from file_utils import FilesUtil
 from config import CONFIG
@@ -242,6 +243,8 @@ class Launcher(object):
         start = 0
         end = 149
         errors = list()
+        values = list()
+        predictions = list()
         for i in range(len(data_set)):
 
             if end < len(data_set):
@@ -251,11 +254,14 @@ class Launcher(object):
                 mse_y = get_mse(x_new[0][1:, 1], y_pre[0][:-1, 1])
                 mse_z = get_mse(x_new[0][1:, 2], y_pre[0][:-1, 2])
                 errors.append(np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z))
+                values.append(x_new)
+                predictions.append(y_pre)
                 current, start, end = FilesUtil.get_next_window(current, dimension=150, start=start, end=end)
                 print("done " + str(i) + "  of " + len(data_set).__str__() + " error " + str(
                     np.sqrt(mse_x * mse_x + mse_y * mse_y + mse_z * mse_z)) + " gesture " + str(gesture_id))
+
         FilesUtil.save_results_to_file(errors, os.path.basename(os.path.splitext(path)[0]), gesture_id)
-        return errors
+        return errors, values, predictions
 
     @staticmethod
     def update_window(data, window, current_end):
@@ -279,6 +285,22 @@ class Launcher(object):
 
     @staticmethod
     def detect(array, gesture_id):
+        peaks = list()
+        count = 0
+        start = 0
+        for i, v in enumerate(array):
+            if v < CONFIG.get_threshold(gesture_id):
+                print("peak found")
+                start = start + count
+                count += 1
+            if count == CONFIG.get_size_dim(gesture_id) - 1:
+                peaks.append(Gesture(start, count, array[start:count]))
+                count = 0
+                start = 0
+        return peaks
+
+    @staticmethod
+    def detect_old(array, gesture_id):
         starting_point = CONFIG.get_size_dim(gesture_id) - 1
         for i, v in enumerate(array[starting_point:]):
             if all(j < CONFIG.get_threshold(gesture_id) for j in v):
@@ -287,30 +309,33 @@ class Launcher(object):
                       + (i + 150).__str__())
 
 
-e1 = FilesUtil.load_result_file('34563456_1', 'err1.p')
-e2 = FilesUtil.load_result_file('34563456_1', 'err2.p')
-e5 = FilesUtil.load_result_file('34563456_1', 'err5.p')
-e6 = FilesUtil.load_result_file('34563456_1', 'err6.p')
-e7 = FilesUtil.load_result_file('34563456_1', 'err7.p')
-e8 = FilesUtil.load_result_file('34563456_1', 'err8.p')
+# e1 = FilesUtil.load_result_file('34563456_1', 'err1.p')
+# e2 = FilesUtil.load_result_file('34563456_1', 'err2.p')
+# e5 = FilesUtil.load_result_file('34563456_1', 'err5.p')
+# e6 = FilesUtil.load_result_file('34563456_1', 'err6.p')
+# e7 = FilesUtil.load_result_file('34563456_1', 'err7.p')
+# e8 = FilesUtil.load_result_file('34563456_1', 'err8.p')
 #
-errors = list()
-errors.append(e1)
-errors.append(e2)
-errors.append(e5)
-errors.append(e6)
-errors.append(e7)
-errors.append(e8)
+# errors = list()
+# errors.append(e1)
+# errors.append(e2)
+# errors.append(e5)
+# errors.append(e6)
+# errors.append(e7)
+# errors.append(e8)
 #
-r1 = Launcher.get_results(series=e1, gesture_id=1)
-r2 = Launcher.get_results(series=e2, gesture_id=2)
-r5 = Launcher.get_results(series=e5, gesture_id=5)
-r6 = Launcher.get_results(series=e6, gesture_id=6)
-r7 = Launcher.get_results(series=e7, gesture_id=7)
-r8 = Launcher.get_results(series=e8, gesture_id=8)
+
+# FilesUtil.plot_online_results(errors)
+#
+# r1 = Launcher.get_results(series=e1, gesture_id=1)
+# r2 = Launcher.get_results(series=e2, gesture_id=2)
+# r5 = Launcher.get_results(series=e5, gesture_id=5)
+# r6 = Launcher.get_results(series=e6, gesture_id=6)
+# r7 = Launcher.get_results(series=e7, gesture_id=7)
+# r8 = Launcher.get_results(series=e8, gesture_id=8)
 
 # Launcher.detect(r1, 1)
-Launcher.detect(r2, 2)
+# Launcher.detect(r2, 2)
 # Launcher.detect(r5, 5)
 # Launcher.detect(r6, 6)
 # Launcher.detect(r7, 7)
@@ -319,7 +344,8 @@ Launcher.detect(r2, 2)
 # print(r8)
 # FilesUtil.convert_folder_content_to_csv(CONFIG.ONLINE_DATA_SET)
 # Launcher.train_models()'1122334455.txt.txt'
-# err1 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 1)
+err1, values, predictions = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 1)
+print(err1)
 # err2 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 2)
 # err5 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 5)
 # err6 = Launcher.online_test(os.path.join(os.getcwd(), 'online_data/34563456_1.txt'), 6)
