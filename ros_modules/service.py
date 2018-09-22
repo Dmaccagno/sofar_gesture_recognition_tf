@@ -1,8 +1,25 @@
 from ros_modules.file_utils import FilesUtil as F
 from ros_modules.config import CONFIG as C
+import ros_modules.models as M
 import ros_modules.rnn_module as R
 import numpy as np
 import os
+
+
+def detect_gesture(array, gesture_id):
+    peaks = list()
+    count = 0
+    start = 0
+    for i, v in enumerate(array):
+        if v < C.get_threshold(gesture_id):
+            print("peak found")
+            start = start + count
+            count += 1
+        if count == C.get_size_dim(gesture_id) - 1:
+            peaks.append(M.Gesture(start, count, array[start:count]))
+            count = 0
+            start = 0
+    return peaks
 
 
 # todo add some comments
