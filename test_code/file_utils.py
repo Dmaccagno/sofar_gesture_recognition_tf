@@ -1,14 +1,12 @@
 import os
 import csv
-import glob
 import numpy as np
 import pandas as pd
-from enum import Enum
 import random
 import pickle
 from matplotlib import pyplot as plt
 
-from config import CONFIG
+from test_code.config import CONFIG
 
 
 # todo : general turn unnecessary static method and turn them to instance method

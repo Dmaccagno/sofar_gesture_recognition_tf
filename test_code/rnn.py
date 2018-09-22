@@ -1,10 +1,9 @@
 import tensorflow as tf
 import numpy as np
 import os
-from file_utils import FilesUtil
-from config import CONFIG
+from test_code.file_utils import FilesUtil
+from test_code.config import CONFIG
 from sklearn.metrics import mean_squared_error
-from math import sqrt
 
 print(tf.__version__)
 

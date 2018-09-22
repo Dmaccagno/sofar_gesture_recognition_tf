@@ -1,15 +1,10 @@
-from matplotlib import pyplot as plt
-from threading import Thread
-
-from models import Gesture
-from rnn import create_rnn_model, evaluate_rnn_model, get_mse
-from file_utils import FilesUtil
-from config import CONFIG
+from test_code.models import Gesture
+from test_code.rnn import create_rnn_model, evaluate_rnn_model, get_mse
+from test_code.file_utils import FilesUtil
+from test_code.config import CONFIG
 from pandas import DataFrame
-from collections import defaultdict
 import numpy as np
 import os
-from itertools import islice
 from collections import Counter
 
 
