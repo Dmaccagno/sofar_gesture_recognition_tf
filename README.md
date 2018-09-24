@@ -3,6 +3,17 @@
 
 Please refer to "ros_modules" folder for ros integration
 
+##### Configuration
+
+To let the scripts work properly, you need to setup `config.py` variable in the `ros_module` folder
+
+```
+base_path = os.path.join(os.path.expanduser("~"), 'MyTests', 'sofar_gesture_recognition_tf')
+```
+
+In this case the project path is `MyTests/sofar_gesture_recognition_tf`, modify it accordance with your system
+
+
 ##### Files description
 
  * config.py - configurations parameters
