@@ -67,7 +67,7 @@ class CONFIG(object):
     evaluation_runs = 10
     experiment_len = 3060
 
-    base_path = os.path.join(os.path.expanduser("~"), 'Projects', 'sofar_gesture_recognition_tf')
+    base_path = os.path.join(os.path.expanduser("~"), 'MyTests', 'sofar_gesture_recognition_tf')
 
     @staticmethod
     def get_path(gesture_id):

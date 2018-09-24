@@ -8,18 +8,30 @@ import os
 
 def detect_gesture(array, gesture_id):
     peaks = list()
+    gestures = dict()
     count = 0
-    start = 0
+    active_peak = 0
     for i, v in enumerate(array):
+        print(v)
         if v < C.get_threshold(gesture_id):
-            print("peak found")
-            start = start + count
-            count += 1
-        if count == C.get_size_dim(gesture_id) - 1:
-            peaks.append(M.Gesture(start, count, array[start:count]))
+            # this is a peak candidate
+            if active_peak not in peaks:
+                active_peak += i
+                peaks.append(active_peak)
+            if active_peak in peaks and count < C.get_size_dim(gesture_id):
+                count += 1
+            if count == C.get_size_dim(gesture_id):
+                print("this is a gesture....")
+                g = M.Gesture
+                g.start = active_peak
+                g.end = count
+                g.data = array[active_peak:count]
+                gestures[active_peak] = g
+                active_peak = 0
+                count = 0
+        else:
             count = 0
-            start = 0
-    return peaks
+    return gestures
 
 
 # todo add some comments
@@ -42,7 +54,7 @@ def evaluate_online(stream_path, gesture_id):
             v_current, v_prediction = R.predict_next_values(stream_batch.values, str(gesture_id),
                                                             C.get_neurons_dim(gesture_id))
             stream_batch, start_index, end_index = \
-                F.get_next_window(stream_batch, dimension=150, start=start_index, end=end_index)
+                F.get_next_window(stream_batch, dimension=C.get_size_dim(gesture_id), start=start_index, end=end_index)
             if not all(np.isnan(i) for i in v_prediction_old):
                 x_error = v_prediction_old[0] - v_current[0]
                 y_error = v_prediction_old[1] - v_current[1]
