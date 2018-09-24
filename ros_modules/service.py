@@ -16,20 +16,26 @@ def detect_gesture(array, gesture_id):
         if v < C.get_threshold(gesture_id):
             # this is a peak candidate
             if active_peak not in peaks:
+                # check if this is the first sample below the threshold and add to the list
                 active_peak += i
                 peaks.append(active_peak)
             if active_peak in peaks and count < C.get_size_dim(gesture_id):
+                # if an active peak exist and the count is below the gesture size, increment the counter
                 count += 1
             if count == C.get_size_dim(gesture_id):
+                # if the counter reach the limit we can say we have found a gesture
                 print("this is a gesture....")
+                # create an object "Gesture" and add it to the dictionary - active_peak index is the key
                 g = M.Gesture
                 g.start = active_peak
                 g.end = count
                 g.data = array[active_peak:count]
                 gestures[active_peak] = g
+                # reset active_peak and counter
                 active_peak = 0
                 count = 0
         else:
+            # if we are above the threshold reset the counter
             count = 0
     return gestures
 
